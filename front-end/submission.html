@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="Logincss.css">
+      <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+      <script src="form.js"> </script>
+    </head>    
+<body>
+
+<h2>Enter the text to be analyzed:</h2>
+
+<form>
+  <label for="premise">Premise/Hypothesis:</label><br>
+  <input type="text" id="premise" name="premise" value=""><br>
+  <label for="statement">Statement:</label><br>
+  <input type="text" id="statement" name="statement" value=""><br><br>
+  <input type="submit" value="Submit">
+</form> 
+<button onclick="signOut()" id="signOut"> Sign Out </button>
+
+
+<p>Once you submit the inputs, the statements would be checked against the premise and labelled accordingly.</p>
+
+</body>
+</html>
