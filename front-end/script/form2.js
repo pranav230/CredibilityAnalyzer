@@ -15,6 +15,7 @@ firebase.analytics();
 const database = firebase.database();
 
 var theUserId;
+var suspectList;
 
 async function signUp() {
 	//Jai bhole nath
@@ -67,8 +68,10 @@ async function signIn() {
 				sessionStorage.setItem("userKey", theUserId);
 				console.log('ID is' + i);
 				idFound = true;
+				suspectList = data[i]["suspectList"];
+				sessionStorage.setItem("suspectList", JSON.stringify(suspectList));
+				console.log(suspectList);
 				window.location.href = "./pages/selectSuspect.html";
-				// alert('Logged in!');
 			}
 		}
 	});
@@ -76,6 +79,23 @@ async function signIn() {
 		alert('Please enter correct id and password');
 		return;
 	}
+}
+
+function fillSuspectList() {
+	var thelist = JSON.parse(sessionStorage.getItem("suspectList"));
+	for (let k in thelist) {
+		$(document).ready(function () {
+			$('#outerdiv').append('<div class="card"><h5 class="card-header">' + 'Crime: ' + thelist[k]['crime'] + '</h5><div class="card-body"><h5 class="card-title">' + 'Suspect name : ' + thelist[k]['name'] + '</h5><p class="card-text">' + 'Date of birth: ' + thelist[k]['dob'] + '</p><a href="#" class="btn btn-primary" onclick="goToSubmission(\'' + k + '\')">Enter Statement</a></div></div>');
+		});
+		console.log(thelist[k]['name'] + ' ' + thelist[k]['phone'] + ' ' + thelist[k]['dob']);
+	}
+}
+
+
+function goToSubmission(suspectId) {
+	sessionStorage.setItem("suspectId", suspectId);
+	console.log('suspect id is ' + sessionStorage.getItem("suspectId"));
+	window.location.href = "./submission.html";
 }
 
 function signOut() {
@@ -86,13 +106,15 @@ function signOut() {
 
 function showInputForm() {
 	document.getElementById("showInputForm").style.display = "block";
+	document.getElementById("showSelectSuspect").style.display = "none";
 }
 
 function showSelectSuspect() {
-
+	document.getElementById("showInputForm").style.display = "none";
+	document.getElementById("showSelectSuspect").style.display = "block";
 }
 
-async function storeSuspectData() {
+function storeSuspectData() {
 	var name = document.getElementById("name").value;
 	var height = document.getElementById("height").value;
 	var weight = document.getElementById("weight").value;
@@ -108,9 +130,20 @@ async function storeSuspectData() {
 	else if (document.getElementById("female").checked) {
 		gender = 'female';
 	}
-	var token = await database.ref('/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
 	console.log(sessionStorage.getItem("userKey") + ' ' + name + ' ' + height + ' ' + weight + ' ' + idnumber + ' ' + dob + ' ' + gender + ' ' + crime + ' ' + hypo);
-	await token.push().set({
+	// var token = await database.ref('/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
+	// token.push().set({
+	// 	name: name,
+	// 	height: height,
+	// 	weight: weight,
+	// 	idnumber: idnumber,
+	// 	dob: dob,
+	// 	gender: gender,
+	// 	crime: crime,
+	// 	hypo: hypo,
+	// });
+
+	database.ref('/users/' + sessionStorage.getItem("userKey") + '/suspectList/').push().set({
 		name: name,
 		height: height,
 		weight: weight,
