@@ -19,5 +19,6 @@ async function fillSuspectName() {
         document.getElementById('suspectName').innerHTML = data['name'];
         document.getElementById('hypo').value = data['hypo'];
         console.log(data['hypo']);
+        //added
     });
 }
