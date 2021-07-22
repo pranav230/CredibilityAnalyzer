@@ -21,14 +21,19 @@
       <h3>Enter the text to be analyzed:</h3>
       <div class="form-group">
         <p>Suspect name: <span id="suspectName"></span></p>
-        <label for="premise">Premise/Hypothesis:</label>
-        <input type="text" class="form-control" name="hypo" id="hypo" placeholder="Enter premise/hypothesis">
+        <label for="premise">Premise:</label>
+        <input type="text" class="form-control" name="pre" id="pre" placeholder="Enter premise/hypothesis">
       </div>
       <div class="form-group">
-        <label for="statement">Statement:</label>
-        <input type="text" value="" class="form-control" placeholder="Statement">
+        <label for="statement">Hypothesis:</label>
+        <input type="text" value="" class="form-control" id="hypo" placeholder="Hypothesis">
       </div>
-      <input type="submit" value="Submit"><br>
+      <div class="form-group">
+        <label for="statement">Result:</label>
+        <input type="text" value="" class="form-control" id="res" placeholder="Result">
+      </div>
+      <button onclick="analyse()" id="signOut" type="submit" class="btn btn-primary so">Submit</button>
+      <!-- <input type="submit" value="Submit"><br> -->
       <p>Once you submit the inputs, the statements would be checked against the premise and labelled accordingly.</p>
     </form>
     <button onclick="signOut()" id="signOut" type="submit" class="btn btn-primary so">Sign Out</button>

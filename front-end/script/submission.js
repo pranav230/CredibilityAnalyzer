@@ -17,8 +17,26 @@ async function fillSuspectName() {
     await token.once('value', (snapshot) => {
         const data = snapshot.val();
         document.getElementById('suspectName').innerHTML = data['name'];
-        document.getElementById('hypo').value = data['hypo'];
+        document.getElementById('pre').value = data['hypo'];
         console.log(data['hypo']);
-        //added
     });
+}
+
+async function analyse() {
+    await fetch("https://localhost:8000/classify", {
+        method: 'POST',
+        body: JSON.stringify({
+            premise: document.getElementById('pre').value,
+            hypothesis: document.getElementById('hypo').value,
+        }),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(function (response) {
+            return respopnse.json()
+        })
+        .then(text => {
+            console.log(text);
+        })
 }
