@@ -68,9 +68,16 @@ async function signIn() {
 				sessionStorage.setItem("userKey", theUserId);
 				console.log('ID is' + i);
 				idFound = true;
-				suspectList = data[i]["suspectList"];
-				sessionStorage.setItem("suspectList", JSON.stringify(suspectList));
-				console.log(suspectList);
+				if (data[i]['suspectList'] != null) {
+					suspectList = data[i]["suspectList"];
+					sessionStorage.setItem("suspectList", JSON.stringify(suspectList));
+					console.log(suspectList);
+					sessionStorage.setItem("listIsEmpty", "false");
+				}
+				else {
+					sessionStorage.setItem("listIsEmpty", "true");
+					console.log('found empty list');
+				}
 				window.location.href = "./pages/selectSuspect.html";
 			}
 		}
@@ -82,13 +89,62 @@ async function signIn() {
 }
 
 function fillSuspectList() {
-	var thelist = JSON.parse(sessionStorage.getItem("suspectList"));
-	for (let k in thelist) {
-		$(document).ready(function () {
-			$('#outerdiv').append('<div class="card"><h5 class="card-header">' + 'Crime: ' + thelist[k]['crime'] + '</h5><div class="card-body"><h5 class="card-title">' + 'Suspect name : ' + thelist[k]['name'] + '</h5><p class="card-text">' + 'Date of birth: ' + thelist[k]['dob'] + '</p><a href="#" class="btn btn-primary" onclick="goToSubmission(\'' + k + '\')">Enter Statement</a></div></div>');
-		});
-		console.log(thelist[k]['name'] + ' ' + thelist[k]['phone'] + ' ' + thelist[k]['dob']);
+
+	if (sessionStorage.getItem("listIsEmpty") == "false") {
+		var thelist = JSON.parse(sessionStorage.getItem("suspectList"));
+		// console.log(thelist);
+		for (let k in thelist) {
+			$(document).ready(function () {
+				$('#outerdiv').append('<div class="card"><h5 class="card-header">' + 'Crime: ' + thelist[k]['crime'] + '</h5><div class="card-body"><h5 class="card-title">' + 'Suspect name : ' + thelist[k]['name'] + '</h5><p class="card-text">' + 'Date of birth: ' + thelist[k]['dob'] + '</p><a href="#" class="btn btn-primary" onclick="goToSubmission(\'' + k + '\')">Enter Statement</a></div></div>');
+			});
+			console.log(thelist[k]['name'] + ' ' + thelist[k]['phone'] + ' ' + thelist[k]['dob']);
+		}
 	}
+
+	document.getElementById("selectSuspect").addEventListener("click", function (event) {
+		console.log('Hua clasdfaslfsdl');
+		event.preventDefault();
+	}, false);
+
+	//below code is for adding to database when button is clicked
+	document.getElementById("submitButton").addEventListener("click", function (event) {
+		console.log('Prevent kiya nigga');
+		var name = document.getElementById("name").value;
+		var height = document.getElementById("height").value;
+		var weight = document.getElementById("weight").value;
+		var idnumber = document.getElementById("idnumber").value;
+		var dob = document.getElementById("dob").value;
+		var crime = document.getElementById("crime").value;
+		var hypo = document.getElementById("hypo").value;
+		var gender;
+
+		if (document.getElementById("male").checked) {
+			gender = 'male';
+		}
+		else if (document.getElementById("female").checked) {
+			gender = 'female';
+		}
+		console.log(sessionStorage.getItem("userKey") + ' ' + name + ' ' + height + ' ' + weight + ' ' + idnumber + ' ' + dob + ' ' + gender + ' ' + crime + ' ' + hypo);
+
+		console.log('/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
+
+		var rootref = database.ref();
+		var storeref = rootref.child('/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
+		var newdata = storeref.push();
+		newdata.set({
+			name: name,
+			height: height,
+			weight: weight,
+			idnumber: idnumber,
+			dob: dob,
+			gender: gender,
+			crime: crime,
+			hypo: hypo,
+		});
+		alert('Record added successfully');
+		event.preventDefault();
+	}, false);
+
 }
 
 
@@ -114,39 +170,12 @@ function showSelectSuspect() {
 	document.getElementById("showSelectSuspect").style.display = "block";
 }
 
+// document.getElementById("submitButton").addEventListener("click", function (event) {
+// 	console.log('Prevent kiya nigga');
+// 	event.preventDefault();
+// }, false);
+
+
 async function storeSuspectData() {
-	var name = document.getElementById("name").value;
-	var height = document.getElementById("height").value;
-	var weight = document.getElementById("weight").value;
-	var idnumber = document.getElementById("idnumber").value;
-	var dob = document.getElementById("dob").value;
-	var crime = document.getElementById("crime").value;
-	var hypo = document.getElementById("hypo").value;
-	var gender;
 
-	if (document.getElementById("male").checked) {
-		gender = 'male';
-	}
-	else if (document.getElementById("female").checked) {
-		gender = 'female';
-	}
-	console.log(sessionStorage.getItem("userKey") + ' ' + name + ' ' + height + ' ' + weight + ' ' + idnumber + ' ' + dob + ' ' + gender + ' ' + crime + ' ' + hypo);
-
-	console.log('1/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
-
-	let token = await database.ref('/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
-
-	await token.push().set({
-		name: name,
-		height: height,
-		weight: weight,
-		idnumber: idnumber,
-		dob: dob,
-		gender: gender,
-		crime: crime,
-		hypo: hypo,
-	});
-	console.log('3/users/' + sessionStorage.getItem("userKey") + '/suspectList/');
-
-	alert('Record added successfully');
 }

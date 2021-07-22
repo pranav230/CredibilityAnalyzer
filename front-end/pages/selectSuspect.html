@@ -26,7 +26,7 @@
             </div>
             <div class="btn-block">
                 <button type="submit" onclick="showInputForm()">Enter new suspect record</button>
-                <button type="submit" onclick="showSelectSuspect()">Select suspect</button>
+                <button type="submit" onclick="showSelectSuspect()" id="selectSuspect">Select suspect</button>
             </div>
             <div class="showInputForm" id="showInputForm" style="display: none;">
                 <p>Suspect Information</p>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="btn-block">
-                    <button type="submit" onclick="storeSuspectData()">SUBMIT</button>
+                    <button type="submit" id="submitButton" onclick="storeSuspectData()">SUBMIT</button>
                 </div>
             </div>
             <div id="showSelectSuspect" style="display: none;">
