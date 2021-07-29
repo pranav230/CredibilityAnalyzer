@@ -88,6 +88,18 @@ async function signIn() {
 	}
 }
 
+function validateDetails(name, idnumber, dob) {
+	if (/\d/.test(name))
+		return "Name cannot have a number in it!";
+	if (idnumber.toString().length != 12)
+		return "Enter valid aadhar number";
+	const arr = dob.split("-");
+	var tonumber = parseInt(arr[0]);
+	if (tonumber >= 2021)
+		return "Please enter a valid date of birth";
+	return "";
+}
+
 function fillSuspectList() {
 
 	if (sessionStorage.getItem("listIsEmpty") == "false") {
@@ -102,7 +114,10 @@ function fillSuspectList() {
 	}
 
 	document.getElementById("selectSuspect").addEventListener("click", function (event) {
-		console.log('Hua clasdfaslfsdl');
+		event.preventDefault();
+	}, false);
+
+	document.getElementById("submitButton").addEventListener("click", function (event) {
 		event.preventDefault();
 	}, false);
 
@@ -117,12 +132,17 @@ function fillSuspectList() {
 		var crime = document.getElementById("crime").value;
 		var hypo = document.getElementById("hypo").value;
 		var gender;
-
 		if (document.getElementById("male").checked) {
 			gender = 'male';
 		}
 		else if (document.getElementById("female").checked) {
 			gender = 'female';
+		}
+
+		var validationInfo = validateDetails(name, idnumber, dob);
+		if (validationInfo != "") {
+			alert(validationInfo);
+			return;
 		}
 		console.log(sessionStorage.getItem("userKey") + ' ' + name + ' ' + height + ' ' + weight + ' ' + idnumber + ' ' + dob + ' ' + gender + ' ' + crime + ' ' + hypo);
 

@@ -8,6 +8,6 @@ class WebappConfig(AppConfig):
     name = 'webapp'
 
 class PredictorConfig(AppConfig):
-    # model = pickle.load(open('/home/pranav/Documents/porject/project/webapp/model.sav','rb'))
+    model = pickle.load(open('/Users/shashvat.pandey/Desktop/Project/CredibilityAnalyzer/backend/server/model.sav','rb'))
     device = 'cpu'
     tokenizer = AutoTokenizer.from_pretrained("joeddav/xlm-roberta-large-xnli", padding=True)
